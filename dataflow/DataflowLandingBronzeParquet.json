@@ -1,0 +1,63 @@
+{
+	"name": "DataflowLandingBronzeParquet",
+	"properties": {
+		"folder": {
+			"name": "Delta Loading/Bronze"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ParquetDS",
+						"type": "DatasetReference"
+					},
+					"name": "ParquetRaw"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureBlobStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "Delta"
+				}
+			],
+			"transformations": [
+				{
+					"name": "MetadataColumns"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceTableName as string (\"\"),",
+				"     TargetTableName as string (\"\")",
+				"}",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
+				"     rowUrlColumn: 'SourceFileName',",
+				"     format: 'parquet',",
+				"     wildcardPaths:[(concat(\"raw/parquet/\",$SourceTableName,\".parquet\"))]) ~> ParquetRaw",
+				"ParquetRaw derive(DateInserted = currentTimestamp()) ~> MetadataColumns",
+				"MetadataColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     container: 'lgnsynapsefs',",
+				"     folderPath: (concat(\"delta/bronze/\",$TargetTableName,\"/\")),",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     optimizedWrite: false,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> Delta"
+			]
+		}
+	}
+}

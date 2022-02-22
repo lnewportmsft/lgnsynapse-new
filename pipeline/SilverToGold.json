@@ -1,0 +1,37 @@
+{
+	"name": "SilverToGold",
+	"properties": {
+		"activities": [
+			{
+				"name": "dimProduct",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "02_SurrogateKeys",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Delta/Gold"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-02-15T22:10:01Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

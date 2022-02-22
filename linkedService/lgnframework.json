@@ -1,0 +1,11 @@
+{
+	"name": "lgnframework",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://lgnframework.vault.azure.net/"
+		}
+	}
+}
